@@ -43,13 +43,13 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model consists of a convolution neural network with 5x5 filter sizes, 3x3 filter sizes and depths between 24 and 64 (model.py lines 90-102) 
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+The model includes RELU layers to introduce nonlinearity (code line 93-97), and the data is normalized in the model using a Keras lambda layer (code line 91). The image is also cropped from above and below so that redundant information will not be passed to the model (code line 92).
 
 #### 2. Attempts to reduce overfitting in the model 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting. After trying to train for multiple epochs, I observed that the model tended to overfit the training data. If I run the overfitted model in simulator, the steering angle will keep switching between positive and negative values, which is due to the driver behavior of the training dataset. After trial and error, I set the number of epoch to 1.
+The model was trained and validated on different data sets to ensure that the model was not overfitting. After trying to train for multiple epochs, I observed that the model tended to overfit the training data. If I run the overfitted model in simulator, the steering angle will keep switching between positive and negative values, which is due to the driving behavior of the training dataset. After trial and error, I set the number of epoch to 1.
 
 #### 3. Model parameter tuning
 
@@ -57,7 +57,7 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. In the beginning, I was using the provided default dataset. The driving behavior in the simulator was very human like, but it sometimes steered to left and went off the track. As a result, I augemented the flipped image and steering angle with flipped sign. 
+Training data was chosen to keep the vehicle driving on the road. In the beginning, I was using the provided default dataset. The driving behavior in the simulator was very human like, but it sometimes steered to left and went off the track. As a result, I augemented the flipped images and steering angles to the training dataset. 
 
 For details about how I created the training data, see the next section. 
 
@@ -79,25 +79,25 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 The final model architecture (model.py lines 90-102) consisted of a convolution neural network with the following layers and layer sizes: 
 
-|Layer (type)               |  Output Shape             | Param |   
-|:-------------------------:|--------------------------:|------:| 
-|lambda_1 (Lambda)          |  (None, 160, 320, 3)      | 0     |          
-|cropping2d_1 (Cropping2D)  |  (None, 66, 320, 3)       | 0     |    
-|conv2d_1 (Conv2D)          |  (None, 31, 158, 24)      | 1824  |    
-|conv2d_2 (Conv2D)          |  (None, 14, 77, 36)       | 21636 |    
-|conv2d_3 (Conv2D)          |  (None, 5, 37, 48)        | 43248 |    
-|conv2d_4 (Conv2D)          |  (None, 3, 35, 64)        | 27712 |    
-|conv2d_5 (Conv2D)          |  (None, 1, 33, 64)        | 36928 |    
-|flatten_1 (Flatten)        |  (None, 2112)             | 0     |    
-|dense_1 (Dense)            |  (None, 100)              | 211300|    
-|dense_2 (Dense)            |  (None, 50)               | 5050  |    
-|dense_3 (Dense)            |  (None, 10)               | 510   |    
-|dense_4 (Dense)            |  (None, 1)                | 11    |    
+|Layer (type)               |  Output Shape             | Param | note | 
+|:-------------------------:|--------------------------:|------:| ----:|
+|lambda_1 (Lambda)          |  (None, 160, 320, 3)      | 0     |      |    
+|cropping2d_1 (Cropping2D)  |  (None, 66, 320, 3)       | 0     |      | 
+|conv2d_1 (Conv2D)          |  (None, 31, 158, 24)      | 1824  | kernel=(5,5,24)|    
+|conv2d_2 (Conv2D)          |  (None, 14, 77, 36)       | 21636 | kernel=(5,5,36)|
+|conv2d_3 (Conv2D)          |  (None, 5, 37, 48)        | 43248 | kernel=(5,5,48)|   
+|conv2d_4 (Conv2D)          |  (None, 3, 35, 64)        | 27712 | kernel=(3,3,64)|   
+|conv2d_5 (Conv2D)          |  (None, 1, 33, 64)        | 36928 | kernel=(3,3,64)|   
+|flatten_1 (Flatten)        |  (None, 2112)             | 0     |    |
+|dense_1 (Dense)            |  (None, 100)              | 211300|    |
+|dense_2 (Dense)            |  (None, 50)               | 5050  |    |
+|dense_3 (Dense)            |  (None, 10)               | 510   |    |
+|dense_4 (Dense)            |  (None, 1)                | 11    |    |
 
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first used the sample dataset that consists multiple laps on track one using center lane driving. The total number of images are 8034. Here is an example image of center lane driving:
+To capture good driving behavior, I first used the sample dataset that consists multiple laps on track one using center lane driving. The total number of images is 8034. Here is an example image of center lane driving:
 
 ![alt text][image2]
 
