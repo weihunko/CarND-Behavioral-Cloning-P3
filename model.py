@@ -36,17 +36,17 @@ with open('data/driving_log.csv') as csvfile:
 	for line in reader:
 		samples.append(line)
 
-recover_samples = []
-with open('data_recover/driving_log.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		recover_samples.append(line)
+# recover_samples = []
+# with open('data_recover/driving_log.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		recover_samples.append(line)
 
-sharpturn_samples = []
-with open('data_sharp_turn/driving_log.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		sharpturn_samples.append(line)
+# sharpturn_samples = []
+# with open('data_sharp_turn/driving_log.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		sharpturn_samples.append(line)
 
 
 angles = []
@@ -102,6 +102,7 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 print('model created')
+model.summary()
 from keras.utils import plot_model
 plot_model(model, to_file='model.png')
 
@@ -109,11 +110,11 @@ plot_model(model, to_file='model.png')
 model.compile(loss='mse', optimizer='adam')
 history_object = model.fit(X_train, y_train, validation_split=0.2, shuffle=True, epochs=1)
 
-# history_object = model.fit_generator(train_generator,
-#             steps_per_epoch=math.ceil(len(train_samples)/batch_size), 
-#             validation_data=validation_generator, 
-#             validation_steps=math.ceil(len(validation_samples)/batch_size), 
-#             epochs=1, verbose=1)
+# # history_object = model.fit_generator(train_generator,
+# #             steps_per_epoch=math.ceil(len(train_samples)/batch_size), 
+# #             validation_data=validation_generator, 
+# #             validation_steps=math.ceil(len(validation_samples)/batch_size), 
+# #             epochs=1, verbose=1)
 
 model.save('model.h5')
 print('model saved')
